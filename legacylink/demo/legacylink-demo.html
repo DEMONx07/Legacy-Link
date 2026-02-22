@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LegacyLink — Digital Immortality Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0a05;--parchment:#f8eddc;--sepia:#8a6120;
+  --gold:#d4a853;--warm:#e6c07a;--amber:#c49030;
+  --muted:rgba(248,237,220,0.5);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);color:var(--parchment);
+  font-family:'DM Sans',sans-serif;min-height:100vh;
+  overflow-x:hidden;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;
+}
+h1,h2,h3,.serif{font-family:'Playfair Display',Georgia,serif}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--sepia);border-radius:2px}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;position:relative}
+.page.active{display:flex;flex-direction:column}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 32px;
+  background:linear-gradient(to bottom,rgba(13,10,5,0.95) 0%,transparent 100%);
+}
+.nav-logo{display:flex;align-items:center;gap:8px;cursor:pointer}
+.nav-logo .dot{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,#e6c07a,#a87a28);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;
+}
+.nav-logo span{font-family:'Playfair Display',serif;font-size:18px;color:#f0dbb5}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{
+  font-size:13px;color:rgba(248,237,220,0.5);cursor:pointer;
+  transition:color 0.2s;text-decoration:none;
+}
+.nav-links a:hover{color:var(--parchment)}
+.btn-primary{
+  padding:10px 22px;border-radius:100px;font-size:13px;font-weight:500;
+  background:linear-gradient(135deg,#e6c07a,#d4a853);color:#2a1a05;
+  cursor:pointer;border:none;transition:transform 0.15s,box-shadow 0.2s;
+}
+.btn-primary:hover{transform:scale(1.03);box-shadow:0 0 30px rgba(212,168,83,0.4)}
+.btn-ghost{
+  padding:10px 22px;border-radius:100px;font-size:13px;
+  background:rgba(212,168,83,0.06);color:rgba(248,237,220,0.7);
+  border:1px solid rgba(212,168,83,0.25);cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-ghost:hover{border-color:rgba(212,168,83,0.5);color:var(--parchment)}
+
+/* ── HERO ── */
+#hero{
+  align-items:center;justify-content:center;text-align:center;
+  padding:120px 24px 60px;position:relative;overflow:hidden;
+}
+.hero-glow{
+  position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,168,83,0.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:100px;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid rgba(212,168,83,0.25);color:rgba(212,168,83,0.7);
+  background:rgba(212,168,83,0.05);margin-bottom:28px;
+}
+.hero h1{
+  font-size:clamp(40px,7vw,90px);line-height:1.05;
+  font-weight:700;letter-spacing:-.02em;margin-bottom:20px;
+}
+.gradient-text{
+  background:linear-gradient(135deg,#e6c07a,#d4a853,#c49030);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{
+  color:rgba(248,237,220,0.5);font-size:18px;max-width:520px;
+  margin:0 auto 40px;line-height:1.65;
+}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.scroll-hint{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:rgba(212,168,83,0.4);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  animation:float 2.5s ease-in-out infinite;
+}
+.scroll-hint .line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(212,168,83,0.4),transparent)}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* ── PERSONAS SECTION ── */
+.personas-section{padding:80px 24px;max-width:1100px;margin:0 auto;width:100%}
+.section-eyebrow{
+  text-align:center;font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:rgba(212,168,83,0.45);margin-bottom:12px;
+}
+.section-title{text-align:center;font-size:clamp(28px,4vw,48px);color:#f0dbb5;margin-bottom:8px}
+.section-sub{text-align:center;color:rgba(248,237,220,0.4);margin-bottom:48px;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{
+  padding:24px;border-radius:20px;cursor:pointer;position:relative;
+  overflow:hidden;transition:transform 0.3s,box-shadow 0.3s;
+  background:linear-gradient(135deg,rgba(26,18,9,0.98),rgba(40,28,14,0.95));
+  border:1px solid rgba(212,168,83,0.12);
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.card::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.4s;
+  border-radius:20px;pointer-events:none;
+}
+.card:hover::before{opacity:1}
+.card-avatar{
+  width:60px;height:60px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:26px;
+  margin-bottom:16px;border:1px solid;
+}
+.card h3{font-size:20px;color:#f0dbb5;margin-bottom:4px}
+.card .card-meta{font-size:12px;color:rgba(212,168,83,0.4);margin-bottom:12px}
+.card .card-trait{font-size:11px;letter-spacing:.08em;color:rgba(248,237,220,0.35);margin-bottom:14px}
+.card blockquote{
+  font-size:13px;color:rgba(248,237,220,0.55);font-style:italic;
+  line-height:1.6;border-left:2px solid;padding-left:12px;margin-bottom:16px;
+}
+.card .cta-arrow{font-size:12px;color:rgba(248,237,220,0.3);transition:all 0.2s}
+.card:hover .cta-arrow{color:rgba(212,168,83,0.7)}
+
+/* ── GALLERY PAGE ── */
+#gallery{padding:100px 24px 60px;max-width:1100px;margin:0 auto;width:100%;align-self:center}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
+.back-btn{
+  display:flex;align-items:center;gap:6px;font-size:13px;
+  color:rgba(248,237,220,0.4);cursor:pointer;background:none;border:none;
+  transition:color 0.2s;
+}
+.back-btn:hover{color:var(--parchment)}
+
+/* ── CHAT PAGE ── */
+#chat{
+  display:none;flex-direction:row;height:100vh;
+  padding-top:0;overflow:hidden;
+}
+#chat.active{display:flex}
+.avatar-sidebar{
+  width:280px;flex-shrink:0;border-right:1px solid rgba(212,168,83,0.1);
+  display:flex;flex-direction:column;align-items:center;
+  padding:80px 24px 24px;background:rgba(13,10,5,0.6);
+  position:relative;
+}
+.avatar-orb-container{
+  width:200px;height:200px;position:relative;margin-bottom:20px;
+}
+canvas#avatarCanvas{width:100%;height:100%;border-radius:50%}
+.avatar-glow-ring{
+  position:absolute;inset:-20px;border-radius:50%;opacity:0.15;
+  animation:glow-pulse 4s ease-in-out infinite;
+}
+@keyframes glow-pulse{0%,100%{opacity:0.1;transform:scale(0.95)}50%{opacity:0.3;transform:scale(1.05)}}
+.avatar-name{font-size:20px;text-align:center;color:#f0dbb5;margin-bottom:6px}
+.avatar-info{font-size:12px;color:rgba(248,237,220,0.35);text-align:center;margin-bottom:16px}
+.emotion-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+  border-radius:100px;font-size:11px;font-weight:500;
+  transition:all 0.4s;
+}
+.chat-main{flex:1;display:flex;flex-direction:column;min-height:0}
+.chat-header{
+  padding:18px 24px;border-bottom:1px solid rgba(212,168,83,0.08);
+  background:rgba(13,10,5,0.9);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.speaking-indicator{
+  display:none;align-items:center;gap:6px;padding:4px 12px;
+  border-radius:100px;font-size:11px;color:var(--gold);
+  background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);
+}
+.speaking-indicator.active{display:flex}
+.speaking-bar{
+  width:3px;border-radius:2px;background:var(--gold);
+  animation:bar-wave 0.6s ease-in-out infinite;
+}
+.speaking-bar:nth-child(2){animation-delay:.1s}
+.speaking-bar:nth-child(3){animation-delay:.2s}
+@keyframes bar-wave{0%,100%{height:4px}50%{height:14px}}
+
+.messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.message{display:flex;gap:10px;animation:msg-in 0.3s ease-out forwards}
+.message.user{flex-direction:row-reverse}
+@keyframes msg-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-avatar{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  margin-top:2px;border:1px solid;
+}
+.bubble{
+  max-width:68%;padding:12px 16px;border-radius:18px;
+  font-size:14px;line-height:1.6;
+}
+.bubble.avatar-bubble{
+  background:rgba(26,18,9,0.9);color:#f8eddc;
+  border:1px solid rgba(212,168,83,0.15);
+  border-radius:4px 18px 18px 18px;
+}
+.bubble.user-bubble{
+  background:rgba(212,168,83,0.1);color:#e6c07a;
+  border:1px solid rgba(212,168,83,0.2);
+  border-radius:18px 18px 4px 18px;
+}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:4px 0}
+.typing-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--gold);
+  animation:dot-bounce 1s ease-in-out infinite;
+}
+.typing-dot:nth-child(2){animation-delay:.15s}
+.typing-dot:nth-child(3){animation-delay:.3s}
+@keyframes dot-bounce{0%,80%,100%{transform:scale(0.6);opacity:0.3}40%{transform:scale(1);opacity:1}}
+
+.suggestions{display:flex;flex-wrap:wrap;gap:8px;padding:8px 24px 0}
+.suggestion-btn{
+  font-size:12px;padding:6px 14px;border-radius:100px;cursor:pointer;
+  background:rgba(212,168,83,0.07);border:1px solid rgba(212,168,83,0.15);
+  color:rgba(248,237,220,0.5);transition:all 0.2s;
+}
+.suggestion-btn:hover{background:rgba(212,168,83,0.12);color:rgba(248,237,220,0.8)}
+
+.input-bar{
+  padding:16px 20px;border-top:1px solid rgba(212,168,83,0.08);
+  background:rgba(13,10,5,0.95);backdrop-filter:blur(10px);
+  display:flex;align-items:center;gap:10px;
+}
+.mic-btn{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);
+  cursor:pointer;transition:all 0.2s;font-size:16px;
+}
+.mic-btn:hover{background:rgba(212,168,83,0.2)}
+.mic-btn.recording{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.4);animation:rec-pulse 1.5s ease-in-out infinite}
+@keyframes rec-pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.4)}50%{box-shadow:0 0 0 10px rgba(239,68,68,0)}}
+#chatInput{
+  flex:1;background:transparent;border:1px solid rgba(212,168,83,0.2);
+  border-radius:100px;padding:12px 18px;font-size:14px;
+  color:var(--parchment);outline:none;font-family:'DM Sans',sans-serif;
+  transition:border-color 0.2s;
+}
+#chatInput:focus{border-color:rgba(212,168,83,0.45)}
+#chatInput::placeholder{color:rgba(248,237,220,0.25)}
+.send-btn{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#e6c07a,#d4a853);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:none;transition:transform 0.15s;font-size:14px;color:#2a1a05;
+}
+.send-btn:hover{transform:scale(1.08)}
+.send-btn:disabled{opacity:0.4}
+
+/* ── PARTICLES ── */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.particle{
+  position:absolute;border-radius:50%;background:rgba(212,168,83,0.25);
+  animation:particle-rise linear infinite;
+}
+@keyframes particle-rise{
+  0%{transform:translateY(110vh);opacity:0}
+  10%{opacity:.6}90%{opacity:.6}
+  100%{transform:translateY(-10vh);opacity:0}
+}
+
+/* ── CLOSING CTA ── */
+.closing{
+  text-align:center;padding:100px 24px;
+  background:radial-gradient(ellipse at center,rgba(212,168,83,0.05) 0%,transparent 70%);
+}
+.closing .serif{font-size:clamp(28px,5vw,60px);line-height:1.2;margin-bottom:32px}
+.closing p{color:rgba(248,237,220,0.35);font-size:14px;margin-bottom:12px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nav-links a:not(:last-child){display:none}
+  .avatar-sidebar{display:none}
+  .chat-main{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<div id="particles"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('hero')">
+    <div class="dot">♥</div>
+    <span>LegacyLink</span>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('gallery')">Gallery</a>
+    <a onclick="showPage('record-page')">Record</a>
+    <button class="btn-primary" onclick="showPage('gallery')">Experience Demo</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ HERO PAGE ═══════════════════════════ -->
+<div id="hero" class="page active" style="flex-direction:column">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden">
+    <div class="hero-glow"></div>
+    
+    <div class="badge" style="animation:msg-in 0.6s 0.2s both">
+      ✦ Digital Immortality Platform ✦
+    </div>
+    
+    <h1 class="serif" style="animation:msg-in 0.7s 0.4s both">
+      Preserve What<br>
+      <span class="gradient-text">Matters Most</span>
+    </h1>
+    
+    <p style="animation:msg-in 0.7s 0.6s both">
+      Record a lifetime of stories. Our AI preserves their personality, voice,
+      and memories — so future generations can have real conversations with the people they loved.
+    </p>
+    
+    <div class="hero-ctas" style="animation:msg-in 0.7s 0.8s both">
+      <button class="btn-primary" onclick="showPage('gallery')">▶ Experience Demo</button>
+      <button class="btn-ghost" onclick="showPage('record-page')">🎙 Start Recording</button>
+    </div>
+    
+    <div class="scroll-hint" style="margin-top:80px">
+      <span>Scroll</span>
+      <div class="line"></div>
+    </div>
+  </div>
+
+  <!-- Personas preview -->
+  <div class="personas-section">
+    <div class="section-eyebrow">Meet The Legacy Keepers</div>
+    <h2 class="section-title serif">Their Stories Live On</h2>
+    <p class="section-sub">Three pre-loaded demo personas, ready for real conversation</p>
+    
+    <div class="cards">
+      <div class="card" onclick="openChat('grandma_ruth')"
+        style="--c:#d4a853"
+        onmouseenter="this.style.boxShadow='0 20px 60px rgba(0,0,0,0.5)'"
+        onmouseleave="this.style.boxShadow=''">
+        <div class="card-avatar" style="background:rgba(212,168,83,0.15);border-color:rgba(212,168,83,0.25)">👵</div>
+        <h3 class="serif">Grandma Ruth</h3>
+        <div class="card-meta">b. 1947 · Columbus, Ohio</div>
+        <div class="card-trait">WARM · HUMOROUS · WISE</div>
+        <blockquote style="border-color:rgba(212,168,83,0.3)">"The days are long, but the years are short."</blockquote>
+        <div class="cta-arrow">Talk to her →</div>
+      </div>
+      
+      <div class="card" onclick="openChat('grandpa_joe')">
+        <div class="card-avatar" style="background:rgba(168,122,40,0.15);border-color:rgba(168,122,40,0.25)">👴</div>
+        <h3 class="serif">Grandpa Joe</h3>
+        <div class="card-meta">b. 1943 · Brooklyn, New York</div>
+        <div class="card-trait">GRUFF · LOYAL · STORYTELLER</div>
+        <blockquote style="border-color:rgba(168,122,40,0.3)">"You build something with your hands — nobody takes that away."</blockquote>
+        <div class="cta-arrow">Talk to him →</div>
+      </div>
+      
+      <div class="card" onclick="openChat('uncle_bob')">
+        <div class="card-avatar" style="background:rgba(138,97,32,0.15);border-color:rgba(138,97,32,0.25)">🎸</div>
+        <h3 class="serif">Uncle Bob</h3>
+        <div class="card-meta">b. 1960 · Santa Cruz, California</div>
+        <div class="card-trait">LAID-BACK · PHILOSOPHICAL · MUSICAL</div>
+        <blockquote style="border-color:rgba(138,97,32,0.3)">"The world isn't dangerous. Fear is dangerous."</blockquote>
+        <div class="cta-arrow">Talk to him →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing -->
+  <div class="closing">
+    <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,168,83,0.35);margin-bottom:24px">LegacyLink</div>
+    <div class="closing .serif serif">
+      We can't stop death.<br>
+      <span class="gradient-text">But we can stop being forgotten.</span>
+    </div>
+    <button class="btn-primary" onclick="showPage('gallery')" style="margin-top:20px">Begin the Demo</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ GALLERY PAGE ═══════════════════════════ -->
+<div id="gallery-page" class="page" style="flex-direction:column">
+  <div style="padding:100px 24px 60px;max-width:1100px;margin:0 auto;width:100%">
+    <button class="back-btn" onclick="showPage('hero')">← Back</button>
+    <h1 class="serif" style="font-size:48px;margin-bottom:8px;margin-top:20px">The Gallery</h1>
+    <p style="color:rgba(248,237,220,0.35);margin-bottom:12px">Choose a legacy to experience</p>
+    
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:11px;color:rgba(212,168,83,0.5);border:1px solid rgba(212,168,83,0.15);background:rgba(212,168,83,0.04);margin-bottom:40px">
+      ♥ Demo Mode — 3 pre-loaded personas. No API keys required.
+    </div>
+    
+    <div class="cards">
+      <div class="card" onclick="openChat('grandma_ruth')">
+        <div style="position:absolute;top:16px;right:16px;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid rgba(212,168,83,0.3);color:rgba(212,168,83,0.6)">Demo</div>
+        <div class="card-avatar" style="background:rgba(212,168,83,0.1);border-color:rgba(212,168,83,0.2)">👵</div>
+        <h3 class="serif">Grandma Ruth</h3>
+        <div class="card-meta">b. 1947 · 78 years · Columbus, Ohio</div>
+        <div style="font-size:12px;color:rgba(248,237,220,0.25);margin-bottom:12px">⏱ 5 memories preserved</div>
+        <div style="height:3px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-bottom:4px">
+          <div style="height:100%;width:25%;background:linear-gradient(to right,rgba(212,168,83,0.5),#d4a853);border-radius:2px"></div>
+        </div>
+        <div style="font-size:11px;color:rgba(248,237,220,0.2);margin-bottom:14px">5/20 memories to full portrait</div>
+        <div class="cta-arrow">Start conversation →</div>
+      </div>
+      
+      <div class="card" onclick="openChat('grandpa_joe')">
+        <div style="position:absolute;top:16px;right:16px;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid rgba(168,122,40,0.3);color:rgba(168,122,40,0.7)">Demo</div>
+        <div class="card-avatar" style="background:rgba(168,122,40,0.1);border-color:rgba(168,122,40,0.2)">👴</div>
+        <h3 class="serif">Grandpa Joe</h3>
+        <div class="card-meta">b. 1943 · 82 years · Brooklyn, New York</div>
+        <div style="font-size:12px;color:rgba(248,237,220,0.25);margin-bottom:12px">⏱ 3 memories preserved</div>
+        <div style="height:3px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-bottom:4px">
+          <div style="height:100%;width:15%;background:linear-gradient(to right,rgba(168,122,40,0.5),#a87a28);border-radius:2px"></div>
+        </div>
+        <div style="font-size:11px;color:rgba(248,237,220,0.2);margin-bottom:14px">3/20 memories to full portrait</div>
+        <div class="cta-arrow">Start conversation →</div>
+      </div>
+      
+      <div class="card" onclick="openChat('uncle_bob')">
+        <div style="position:absolute;top:16px;right:16px;font-size:10px;padding:3px 10px;border-radius:100px;border:1px solid rgba(138,97,32,0.3);color:rgba(138,97,32,0.7)">Demo</div>
+        <div class="card-avatar" style="background:rgba(138,97,32,0.1);border-color:rgba(138,97,32,0.2)">🎸</div>
+        <h3 class="serif">Uncle Bob</h3>
+        <div class="card-meta">b. 1960 · 65 years · Santa Cruz, California</div>
+        <div style="font-size:12px;color:rgba(248,237,220,0.25);margin-bottom:12px">⏱ 3 memories preserved</div>
+        <div style="height:3px;border-radius:2px;background:rgba(255,255,255,0.05);overflow:hidden;margin-bottom:4px">
+          <div style="height:100%;width:15%;background:linear-gradient(to right,rgba(138,97,32,0.5),#8a6120);border-radius:2px"></div>
+        </div>
+        <div style="font-size:11px;color:rgba(248,237,220,0.2);margin-bottom:14px">3/20 memories to full portrait</div>
+        <div class="cta-arrow">Start conversation →</div>
+      </div>
+      
+      <div class="card" onclick="showPage('record-page')" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:240px">
+        <div style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(212,168,83,0.2);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px">+</div>
+        <h3 class="serif" style="font-size:17px;color:rgba(248,237,220,0.35)">Preserve a Memory</h3>
+        <p style="font-size:12px;color:rgba(248,237,220,0.2);margin-top:6px">Record stories from someone you love</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ CHAT PAGE ═══════════════════════════ -->
+<div id="chat" style="display:none">
+  <!-- Avatar Sidebar -->
+  <div class="avatar-sidebar">
+    <div class="avatar-orb-container">
+      <div class="avatar-glow-ring" id="glowRing"></div>
+      <canvas id="avatarCanvas" width="200" height="200"></canvas>
+    </div>
+    <div class="avatar-name serif" id="sidebarName">Grandma Ruth</div>
+    <div class="avatar-info" id="sidebarInfo">b. 1947 · Columbus, Ohio</div>
+    <div class="emotion-badge" id="emotionBadge" style="background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);color:#d4a853">
+      🌻 Warm
+    </div>
+  </div>
+  
+  <!-- Chat Main -->
+  <div class="chat-main">
+    <div class="chat-header">
+      <button class="back-btn" onclick="showPage('gallery-page')">← Gallery</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="speakingIndicator" class="speaking-indicator">
+          <div class="speaking-bar"></div>
+          <div class="speaking-bar"></div>
+          <div class="speaking-bar"></div>
+          <span>Speaking</span>
+        </div>
+        <button onclick="toggleVoice()" id="voiceToggle" style="background:none;border:none;color:rgba(248,237,220,0.3);cursor:pointer;font-size:18px" title="Toggle voice">🔊</button>
+      </div>
+    </div>
+    
+    <div class="messages" id="messages"></div>
+    <div class="suggestions" id="suggestions"></div>
+    
+    <div class="input-bar">
+      <div class="mic-btn" id="micBtn" onclick="toggleRecording()" title="Voice input">🎙</div>
+      <input id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="send-btn" onclick="sendChat()" id="sendBtn">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ RECORD PAGE ═══════════════════════════ -->
+<div id="record-page" class="page" style="flex-direction:column;align-items:center;justify-content:center;padding:100px 24px">
+  <div style="max-width:560px;width:100%">
+    <button class="back-btn" onclick="showPage('hero')" style="margin-bottom:28px">← Back</button>
+    
+    <div id="record-setup">
+      <div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(212,168,83,0.4);margin-bottom:12px">Begin a Legacy</div>
+      <h1 class="serif" style="font-size:36px;margin-bottom:8px">Who would you like to preserve?</h1>
+      <p style="color:rgba(248,237,220,0.35);font-size:14px;margin-bottom:32px">We'll guide you through capturing their memories, stories, and personality.</p>
+      
+      <div style="margin-bottom:18px">
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(212,168,83,0.4);display:block;margin-bottom:8px">Name *</label>
+        <input id="recordName" placeholder="Grandma Ruth, Uncle Bob..." style="width:100%;background:transparent;border:1px solid rgba(212,168,83,0.2);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--parchment);outline:none;font-family:'DM Sans',sans-serif" onfocus="this.style.borderColor='rgba(212,168,83,0.4)'" onblur="this.style.borderColor='rgba(212,168,83,0.2)'">
+      </div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px">
+        <div>
+          <label style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(212,168,83,0.4);display:block;margin-bottom:8px">Birth Year</label>
+          <input id="recordYear" placeholder="1940" type="number" style="width:100%;background:transparent;border:1px solid rgba(212,168,83,0.2);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--parchment);outline:none;font-family:'DM Sans',sans-serif" onfocus="this.style.borderColor='rgba(212,168,83,0.4)'" onblur="this.style.borderColor='rgba(212,168,83,0.2)'">
+        </div>
+        <div>
+          <label style="font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(212,168,83,0.4);display:block;margin-bottom:8px">Hometown</label>
+          <input id="recordPlace" placeholder="Brooklyn, NY" style="width:100%;background:transparent;border:1px solid rgba(212,168,83,0.2);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--parchment);outline:none;font-family:'DM Sans',sans-serif" onfocus="this.style.borderColor='rgba(212,168,83,0.4)'" onblur="this.style.borderColor='rgba(212,168,83,0.2)'">
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="startRecording()" style="width:100%;padding:14px">Begin Recording →</button>
+    </div>
+    
+    <div id="record-done" style="display:none;text-align:center;padding:40px 0">
+      <div style="font-size:64px;margin-bottom:20px;animation:msg-in 0.5s">✦</div>
+      <h2 class="serif" style="font-size:36px;margin-bottom:12px" id="doneName">Legacy is Alive</h2>
+      <p style="color:rgba(248,237,220,0.4);margin-bottom:28px">Memories preserved. Your avatar is ready for conversations that will last forever.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-primary" onclick="showPage('gallery-page')">View Gallery</button>
+        <button class="btn-ghost" onclick="showPage('hero')">Back Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// LEGACYLINK — COMPLETE DEMO ENGINE
+// Works 100% in-browser, no server needed
+// ═══════════════════════════════════════════════════════
+
+// ── Particles ──────────────────────────────────────────
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    Object.assign(p.style, {
+      width: size + 'px', height: size + 'px',
+      left: Math.random() * 100 + '%',
+      animationDuration: (Math.random() * 15 + 12) + 's',
+      animationDelay: (Math.random() * 15) + 's',
+      opacity: Math.random() * 0.5 + 0.1,
+    });
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+// ── Navigation ─────────────────────────────────────────
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('chat').style.display = 'none';
+  
+  const page = document.getElementById(pageId === 'gallery' ? 'gallery-page' : pageId);
+  if (page) {
+    page.classList.add('active');
+  }
+  window.scrollTo(0, 0);
+}
+
+// ── Persona data ────────────────────────────────────────
+const PERSONAS = {
+  grandma_ruth: {
+    name: 'Grandma Ruth', birthYear: 1947, place: 'Columbus, Ohio',
+    emoji: '👵', color: '#d4a853', emotion: '🌻 Warm',
+    suggestions: ["Tell me about your first kiss","How did Grandpa propose?","What's your secret pie recipe?","Do you still think about Harold?"],
+    greeting: "Oh my, hello dear! Come sit down — I was just thinking about you. What would you like to talk about?",
+    responses: {
+      'first kiss': "Oh my, that was Harold Thompson at the county fair in 1963. I was sixteen and wearing my best yellow dress — mama made it from curtain fabric, though I never told anyone that. Harold was so nervous he spilled lemonade all over me right before he kissed me! I was furious and flattered all at once.",
+      'harold': "Sometimes I think about what might have been. But your grandfather was my true love. Harold couldn't dance a step and Walter — lord that man could waltz. Some people you date, and some people you build a life with. I got lucky enough to choose right.",
+      'propose': "Oh, he was something! On Christmas Eve, 1968. He was so nervous — this big strong veteran — he dropped the ring behind the radiator and we spent twenty minutes fishing it out with a coat hanger! When he finally put it on my finger, I cried so hard my mother thought something terrible had happened.",
+      'pie': "Every Sunday I made my grandmother's apple pie. Lard crust — people turn their noses up at lard but it makes the flakiest crust you'll ever taste. The secret is ice cold water and not overworking the dough. I taught every one of my grandchildren. Some of them even remembered to use lard!",
+      'grandfather': "Your grandfather was the love of my life. We danced at every wedding, every New Year's, right up until his knee gave out in 2003. He made me laugh every single day for forty years. That is a gift, dear. Not everyone gets that.",
+      'children': "The day your mother was born was the happiest day of my life. After two years of hoping and praying. She came into this world screaming at the top of her lungs and I thought — that is someone who knows what she wants. I held her and the whole world just... stopped.",
+      default: [
+        "Oh, that reminds me of something. You know, every experience teaches you something if you pay attention. That's what I always told my children.",
+        "Goodness, dear, I think about things like that. Life is full of surprises — the good ones and the hard ones both shape you.",
+        "You know what I always say — the days are long but the years are short. Treasure every single moment, dear.",
+        "Well now, let me think on that. *laughs softly* You know, at my age, the memories all sort of blend together like a good stew.",
+        "Oh my goodness, yes! That takes me back. You know, the older I get, the more I realize it's the small moments that matter most."
+      ]
+    }
+  },
+  grandpa_joe: {
+    name: 'Grandpa Joe', birthYear: 1943, place: 'Brooklyn, New York',
+    emoji: '👴', color: '#a87a28', emotion: '🦁 Gruff',
+    suggestions: ["Tell me about Korea","How did you meet Grandma?","Tell me about building the business","What's the most important thing in life?"],
+    greeting: "Hey, come in. You want coffee? Real coffee, not that fancy stuff. Sit down.",
+    responses: {
+      'korea': "Korea, 1952. Lemme tell ya — it's cold over there in ways your bones remember forever. I was nineteen. Just a kid from Flatbush who'd never been anywhere. The guys in my unit were tighter than family. Sal Mangione from the Bronx, Deke Williams from Georgia. We kept each other alive. I don't talk about what we saw. But those men. Those men I'll carry with me always.",
+      'grandma': "I met your grandmother at a USO dance in '54. She had on a red dress and she was laughing at something her friend said and I thought — that's the woman I'm gonna marry. I walked across that whole gymnasium — and I was not a dancer, you understand — stepped on her feet three times. She married me anyway. Go figure.",
+      'business': "One truck, 1961. Joe Marchetti's Moving and Storage. Drove it myself for three years before I could afford to hire my first guy. There were times I wasn't sure we'd make the rent — Rose never complained, not once. By 1975 we had twelve trucks. You build something with your hands, nobody can take that away.",
+      'war': "War is... it changes a man. I came back different. Everybody did. But you learned what you were made of. I don't regret going. I regret what it cost.",
+      'important': "Loyalty. That's it. Everything else is secondary. You're loyal to your family, your word, your crew. You don't walk away when things get hard. That's the whole thing.",
+      default: [
+        "Lemme tell ya something. Back in my day you didn't complain, you just worked harder. That's how it was.",
+        "You see, the thing people don't understand is — nothing worth having comes easy. I don't care what anybody tells ya.",
+        "Eh, I've seen a lot in my years. People think they got it figured out. Nobody's got it figured out. You just keep moving.",
+        "*long pause* You know what, that's a good question. Let me think about it. *drums fingers* Yeah. Here's what I think.",
+        "Kid, I'm gonna tell you something my father told me. You ready? He said — show up. That's it. Half the battle is just showing up."
+      ]
+    }
+  },
+  uncle_bob: {
+    name: 'Uncle Bob', birthYear: 1960, place: 'Santa Cruz, California',
+    emoji: '🎸', color: '#8a6120', emotion: '🌊 Peaceful',
+    suggestions: ["What was Woodstock like?","Tell me about learning guitar in Bali","What did hitchhiking teach you?","What's your philosophy on life?"],
+    greeting: "Hey man! Far out, I was just playing some old Coltrane. Pull up a chair — what's on your mind?",
+    responses: {
+      'woodstock': "Man, Woodstock. August '69. I was nine — yeah yeah, too young, but my sister Carol snuck me in her VW bus. Three days of rain and music and just... humanity. Half a million people and somehow it worked. I heard Hendrix play the Star Spangled Banner and something in my nine-year-old brain just rewired completely. Music was never background after that. Music was the whole point.",
+      'guitar': "I learned guitar in Bali in '84, from this old man named Ketut. He didn't speak English, I didn't speak Balinese, but music doesn't need translation, you know? He made the most beautiful sounds from this beat-up acoustic. I stayed three months. The ocean teaches patience. The guitar teaches humility.",
+      'hitchhike': "I hitchhiked from Santa Cruz to Tierra del Fuego in 1978. Fourteen months. Nothing but a guitar and a good attitude. People are fundamentally good, man. That's what you learn on the road. Every country, every language — people want to connect, want to share. The world isn't dangerous. Fear is dangerous.",
+      'philosophy': "Everything is connected, man. The more you travel, the more you realize we're all the same story being told different ways. I've been to fifty countries and the one thing I can tell you is — nobody actually knows what they're doing. And that's beautiful. Embrace the mystery.",
+      'music': "Music is the only language that crosses every border. I've played with fishermen in Portugal, monks in Thailand, kids in townships in South Africa. The chord is the same everywhere. That's not nothing — that's everything.",
+      default: [
+        "Man, that's deep. I think about stuff like that on the beach sometimes. The answer is usually in the question, you know?",
+        "Far out. You know what, everything is connected, man. The more I travel, the more I see it.",
+        "Like, I've been to fifty-something countries and the one thing I can tell you is — nobody actually knows what they're doing. And that's beautiful, man.",
+        "*strums imaginary guitar* Yeah... yeah. That reminds me of something that happened in Morocco in '87...",
+        "Heavy question, man. *pause* You know, my friend Ketut in Bali — he used to say the river doesn't ask where it's going. It just flows. I think about that a lot."
+      ]
+    }
+  }
+};
+
+// ── Canvas Avatar Renderer ──────────────────────────────
+let animFrame, canvasCtx, currentColor = '#d4a853';
+let orbPhase = 0, isSpeakingNow = false, emotionPulse = 0;
+
+function startAvatarCanvas(color) {
+  currentColor = color;
+  const canvas = document.getElementById('avatarCanvas');
+  canvasCtx = canvas.getContext('2d');
+  if (animFrame) cancelAnimationFrame(animFrame);
+  drawOrb();
+}
+
+function drawOrb() {
+  const canvas = document.getElementById('avatarCanvas');
+  if (!canvas || !canvasCtx) return;
+  const w = canvas.width, h = canvas.height;
+  const cx = w/2, cy = h/2;
+  
+  canvasCtx.clearRect(0, 0, w, h);
+  orbPhase += 0.02;
+  if (isSpeakingNow) orbPhase += 0.04;
+  
+  const col = currentColor;
+  const hex2rgb = (hex) => {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return {r,g,b};
+  };
+  const {r,g,b} = hex2rgb(col);
+  
+  // Outer glow rings
+  for (let i = 3; i >= 1; i--) {
+    const radius = 75 + i*15 + Math.sin(orbPhase + i) * 5;
+    const grad = canvasCtx.createRadialGradient(cx,cy,0,cx,cy,radius);
+    grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
+    grad.addColorStop(0.7, `rgba(${r},${g},${b},0)`);
+    grad.addColorStop(1, `rgba(${r},${g},${b},${0.06 - i*0.01})`);
+    canvasCtx.beginPath();
+    canvasCtx.arc(cx, cy, radius, 0, Math.PI*2);
+    canvasCtx.fillStyle = grad;
+    canvasCtx.fill();
+  }
+  
+  // Main orb
+  const baseR = 55 + Math.sin(orbPhase*1.5)*3;
+  const speakR = isSpeakingNow ? Math.sin(orbPhase*8)*8 : 0;
+  const radius = baseR + speakR;
+  
+  const gradient = canvasCtx.createRadialGradient(cx-15, cy-15, 5, cx, cy, radius);
+  gradient.addColorStop(0, `rgba(${r+40},${g+30},${b+10},0.95)`);
+  gradient.addColorStop(0.4, `rgba(${r},${g},${b},0.9)`);
+  gradient.addColorStop(0.8, `rgba(${Math.max(0,r-30)},${Math.max(0,g-30)},${Math.max(0,b-30)},0.8)`);
+  gradient.addColorStop(1, `rgba(${Math.max(0,r-50)},${Math.max(0,g-50)},${Math.max(0,b-50)},0.6)`);
+  
+  canvasCtx.beginPath();
+  canvasCtx.arc(cx, cy, radius, 0, Math.PI*2);
+  canvasCtx.fillStyle = gradient;
+  canvasCtx.fill();
+  
+  // Inner core
+  const innerGrad = canvasCtx.createRadialGradient(cx-8,cy-8,2,cx,cy,30);
+  innerGrad.addColorStop(0, `rgba(255,245,220,0.9)`);
+  innerGrad.addColorStop(0.5, `rgba(${r+20},${g+15},${b},0.6)`);
+  innerGrad.addColorStop(1, 'transparent');
+  canvasCtx.beginPath();
+  canvasCtx.arc(cx, cy, 28 + Math.sin(orbPhase*2)*2, 0, Math.PI*2);
+  canvasCtx.fillStyle = innerGrad;
+  canvasCtx.fill();
+  
+  // Floating particles
+  for (let i = 0; i < 8; i++) {
+    const angle = (orbPhase * 0.5) + (i * Math.PI * 2 / 8);
+    const pr = 72 + Math.sin(orbPhase + i*0.8) * 12;
+    const px = cx + Math.cos(angle) * pr;
+    const py = cy + Math.sin(angle) * pr;
+    const ps = 1.5 + Math.sin(orbPhase*2 + i) * 0.8;
+    canvasCtx.beginPath();
+    canvasCtx.arc(px, py, ps, 0, Math.PI*2);
+    canvasCtx.fillStyle = `rgba(${r},${g},${b},${0.4 + Math.sin(orbPhase+i)*0.2})`;
+    canvasCtx.fill();
+  }
+  
+  animFrame = requestAnimationFrame(drawOrb);
+}
+
+// ── Chat Engine ─────────────────────────────────────────
+let currentPersona = null;
+let voiceEnabled = true;
+let messageHistory = [];
+const API_URL = (window.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
+
+function openChat(personaId) {
+  currentPersona = PERSONAS[personaId];
+  messageHistory = [];
+  
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const chat = document.getElementById('chat');
+  chat.style.display = 'flex';
+  
+  // Update sidebar
+  document.getElementById('sidebarName').textContent = currentPersona.name;
+  const age = new Date().getFullYear() - currentPersona.birthYear;
+  document.getElementById('sidebarInfo').textContent = `b. ${currentPersona.birthYear} · ${age} years · ${currentPersona.place}`;
+  document.getElementById('glowRing').style.background = currentPersona.color;
+  updateEmotion(currentPersona.emotion);
+  
+  // Start canvas
+  startAvatarCanvas(currentPersona.color);
+  
+  // Clear messages
+  document.getElementById('messages').innerHTML = '';
+  
+  // Suggestions
+  const sugDiv = document.getElementById('suggestions');
+  sugDiv.innerHTML = currentPersona.suggestions.map(q =>
+    `<button class="suggestion-btn" onclick="sendMessage('${q.replace(/'/g,"\\'")}');this.parentElement.style.display='none'">${q}</button>`
+  ).join('');
+  
+  // Greeting
+  setTimeout(() => addMessage('avatar', currentPersona.greeting, currentPersona.emotion), 600);
+}
+
+function updateEmotion(emotion) {
+  const badge = document.getElementById('emotionBadge');
+  badge.textContent = emotion;
+  badge.style.background = `rgba(${hexToRgb(currentPersona?.color || '#d4a853')},0.12)`;
+  badge.style.color = currentPersona?.color || '#d4a853';
+  badge.style.border = `1px solid rgba(${hexToRgb(currentPersona?.color || '#d4a853')},0.25)`;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+function addMessage(role, text, emotion) {
+  const div = document.getElementById('messages');
+  const id = 'msg_' + Date.now();
+  
+  const html = role === 'avatar' ? `
+    <div class="message" id="${id}">
+      <div class="msg-avatar" style="background:rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.12);border-color:rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.2)">${currentPersona?.emoji||'👤'}</div>
+      <div>
+        <div class="bubble avatar-bubble" id="bubble_${id}"></div>
+        ${emotion ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px"><span style="font-size:11px;padding:3px 10px;border-radius:100px;background:rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.1);color:${currentPersona?.color||'#d4a853'};border:1px solid rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.2)">${emotion}</span></div>` : ''}
+      </div>
+    </div>
+  ` : `
+    <div class="message user" id="${id}">
+      <div class="bubble user-bubble">${escHtml(text)}</div>
+    </div>
+  `;
+  
+  div.insertAdjacentHTML('beforeend', html);
+  div.scrollTop = div.scrollHeight;
+  
+  if (role === 'avatar') {
+    typewriter(`bubble_${id}`, text, () => {
+      if (voiceEnabled) speakText(text);
+    });
+  }
+  
+  messageHistory.push({ role, text });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function typewriter(elemId, text, onDone) {
+  const el = document.getElementById(elemId);
+  if (!el) return;
+  let i = 0;
+  el.textContent = '';
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (onDone) onDone();
+    }
+  }, 16);
+}
+
+function showTyping() {
+  const div = document.getElementById('messages');
+  div.insertAdjacentHTML('beforeend', `
+    <div class="message" id="typingMsg">
+      <div class="msg-avatar" style="background:rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.12);border-color:rgba(${hexToRgb(currentPersona?.color||'#d4a853')},0.2)">${currentPersona?.emoji||'👤'}</div>
+      <div class="bubble avatar-bubble">
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+  `);
+  div.scrollTop = div.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById('typingMsg')?.remove();
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || !currentPersona) return;
+  
+  input.value = '';
+  document.getElementById('sendBtn').disabled = true;
+  
+  addMessage('user', text);
+  showTyping();
+  
+  // Try API first, fall back to demo
+  let response, emotion;
+  try {
+    const res = await fetch(`${API_URL}/api/chat/${getPersonaId(currentPersona.name)}`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query:text, session_id:'demo_session'}),
+      signal: AbortSignal.timeout(5000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      response = data.response;
+      emotion = data.emotion;
+    } else { throw new Error('API error'); }
+  } catch {
+    // Demo mode fallback
+    await new Promise(r => setTimeout(r, 800 + Math.random()*600));
+    [response, emotion] = getDemoResponse(text);
+  }
+  
+  removeTyping();
+  document.getElementById('sendBtn').disabled = false;
+  
+  // Pick emotion display
+  const emotionLabels = {
+    warm:'🌻 Warm', nostalgic:'🌅 Nostalgic', joyful:'✨ Joyful',
+    sad:'🌧 Reflective', proud:'🦁 Proud', thoughtful:'🌿 Thoughtful',
+    romantic_nostalgic:'🌹 Romantic', joyful_loving:'💛 Loving',
+    peaceful:'🌊 Peaceful', philosophical:'🌿 Philosophical',
+    default:'🕊 Present'
+  };
+  const emotionLabel = emotionLabels[emotion] || emotionLabels[emotion?.split('_')[0]] || currentPersona.emotion;
+  
+  updateEmotion(emotionLabel);
+  addMessage('avatar', response, emotionLabel);
+}
+
+function sendMessage(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+function getDemoResponse(query) {
+  const q = query.toLowerCase();
+  const r = currentPersona.responses;
+  
+  for (const [key, val] of Object.entries(r)) {
+    if (key === 'default') continue;
+    if (q.includes(key) || key.split(' ').some(w => q.includes(w))) {
+      return [val, 'nostalgic'];
+    }
+  }
+  
+  const defaults = r.default;
+  return [defaults[Math.floor(Math.random()*defaults.length)], 'warm'];
+}
+
+function getPersonaId(name) {
+  const map = {
+    'Grandma Ruth': '550e8400-e29b-41d4-a716-446655440001',
+    'Grandpa Joe': '550e8400-e29b-41d4-a716-446655440002',
+    'Uncle Bob': '550e8400-e29b-41d4-a716-446655440003',
+  };
+  return map[name] || '550e8400-e29b-41d4-a716-446655440001';
+}
+
+// ── Voice ───────────────────────────────────────────────
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.88; utterance.pitch = 1.0; utterance.volume = 0.9;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.name.includes('Samantha') || v.name.includes('Google US English'));
+  if (preferred) utterance.voice = preferred;
+  
+  utterance.onstart = () => {
+    isSpeakingNow = true;
+    document.getElementById('speakingIndicator').classList.add('active');
+  };
+  utterance.onend = utterance.onerror = () => {
+    isSpeakingNow = false;
+    document.getElementById('speakingIndicator').classList.remove('active');
+  };
+  window.speechSynthesis.speak(utterance);
+}
+
+function toggleVoice() {
+  voiceEnabled = !voiceEnabled;
+  document.getElementById('voiceToggle').textContent = voiceEnabled ? '🔊' : '🔇';
+  if (!voiceEnabled) window.speechSynthesis?.cancel();
+}
+
+// ── Voice recording ─────────────────────────────────────
+let mediaRecorder = null, audioChunks = [];
+async function toggleRecording() {
+  const btn = document.getElementById('micBtn');
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    btn.classList.remove('recording');
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(audioChunks, {type:'audio/webm'});
+      stream.getTracks().forEach(t => t.stop());
+      // Try transcription
+      try {
+        const form = new FormData();
+        form.append('file', blob, 'audio.webm');
+        const res = await fetch(`${API_URL}/api/voice/transcribe`, {method:'POST', body:form, signal:AbortSignal.timeout(10000)});
+        const data = await res.json();
+        if (data.text) {
+          document.getElementById('chatInput').value = data.text;
+          sendChat();
+        }
+      } catch {
+        showToast('Voice transcription unavailable — type your message');
+      }
+    };
+    mediaRecorder.start();
+    btn.classList.add('recording');
+  } catch {
+    showToast('Microphone unavailable — type your message');
+  }
+}
+
+// ── Record page ─────────────────────────────────────────
+function startRecording() {
+  const name = document.getElementById('recordName').value.trim();
+  if (!name) { showToast('Please enter a name'); return; }
+  
+  document.getElementById('record-setup').style.display = 'none';
+  document.getElementById('record-done').style.display = 'block';
+  document.getElementById('doneName').textContent = `${name}'s Legacy is Alive`;
+  showToast(`${name}'s legacy has been created! ✦`);
+}
+
+// ── Toast ───────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position:'fixed', bottom:'24px', right:'24px', zIndex:'10000',
+    padding:'12px 20px', borderRadius:'12px', fontSize:'13px',
+    background:'rgba(26,18,9,0.95)', color:'#f8eddc',
+    border:'1px solid rgba(212,168,83,0.3)',
+    animation:'msg-in 0.3s ease-out', maxWidth:'320px',
+    boxShadow:'0 8px 32px rgba(0,0,0,0.4)',
+    fontFamily:"'DM Sans', sans-serif",
+  });
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ── Init ────────────────────────────────────────────────
+window.speechSynthesis?.getVoices();
+</script>
+</body>
+</html>

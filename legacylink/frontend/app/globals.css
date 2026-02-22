@@ -1,0 +1,282 @@
+/* stylelint-disable at-rule-no-unknown, no-descending-specificity, property-no-vendor-prefix */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #1a1209;
+  --color-parchment: #f8eddc;
+  --color-sepia: #8a6120;
+  --color-gold: #d4a853;
+  --color-warm: #e6c07a;
+  --color-amber: #c49030;
+  --color-dark: #0d0a05;
+  --color-muted: rgba(248, 237, 220, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-dark);
+  color: var(--color-parchment);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sepia);
+  border-radius: 3px;
+}
+
+/* Glowing border utility */
+.glow-border {
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.2), inset 0 0 30px rgba(212, 168, 83, 0.05);
+}
+
+/* Sepia photo effect */
+.photo-sepia {
+  filter: sepia(30%) contrast(1.05) brightness(0.95);
+}
+
+/* Text selection */
+::selection {
+  background: rgba(212, 168, 83, 0.3);
+  color: var(--color-parchment);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #e6c07a, #d4a853, #c49030);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Recording pulse animation */
+@keyframes recording-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+  }
+}
+
+.recording-active {
+  animation: recording-pulse 1.5s ease-in-out infinite;
+}
+
+/* Waveform bars */
+@keyframes wave-bar {
+
+  0%,
+  100% {
+    scaleY: 0.2;
+  }
+
+  50% {
+    scaleY: 1;
+  }
+}
+
+/* Message bubble slide */
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.message-in {
+  animation: message-in 0.3s ease-out forwards;
+}
+
+/* Particle float */
+@keyframes particle-drift {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Hero text shimmer */
+@keyframes text-shimmer {
+  0% {
+    background-position: -500px 0;
+  }
+
+  100% {
+    background-position: 500px 0;
+  }
+}
+
+/* Avatar glow pulse */
+@keyframes avatar-glow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 20px rgba(212, 168, 83, 0.4));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 60px rgba(212, 168, 83, 0.8));
+  }
+}
+
+.avatar-glow {
+  animation: avatar-glow 4s ease-in-out infinite;
+}
+
+/* Vintage border ornament */
+.ornament-border {
+  border: 1px solid rgba(212, 168, 83, 0.3);
+  position: relative;
+}
+
+.ornament-border::before,
+.ornament-border::after {
+  content: '✦';
+  position: absolute;
+  color: var(--color-gold);
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.ornament-border::before {
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-dark);
+  padding: 0 4px;
+}
+
+/* Dynamic persona color utilities */
+.bg-persona {
+  background-color: var(--persona-color);
+}
+
+.text-persona {
+  color: var(--persona-color);
+}
+
+.border-persona {
+  border-color: var(--persona-color);
+}
+
+.bg-persona-20 {
+  background-color: var(--persona-color-20);
+}
+
+.bg-persona-15 {
+  background-color: var(--persona-color-15);
+}
+
+.bg-persona-10 {
+  background-color: var(--persona-color-10);
+}
+
+.border-persona-30 {
+  border-color: var(--persona-color-30);
+}
+
+.border-persona-15 {
+  border-color: var(--persona-color-15);
+}
+
+.radial-glow-persona {
+  background: radial-gradient(circle at 50% 0%, var(--persona-color-15) 0%, transparent 70%);
+}
+
+.radial-ambient-persona {
+  background: radial-gradient(ellipse at 30% 20%, var(--persona-color-10) 0%, transparent 60%);
+}
+
+.persona-gradient-br {
+  background: linear-gradient(135deg, var(--persona-color-30), var(--persona-color-15));
+}
+
+.persona-progress-gradient {
+  background-image: linear-gradient(to right, var(--persona-color-60), var(--persona-color));
+}
+
+/* Demo Persona Static Classes (Linter Friendly Hex Alphas) */
+.persona-grandma-ruth {
+  --persona-color: #d4a853;
+  --persona-color-60: #d4a85399;
+  --persona-color-30: #d4a8534d;
+  --persona-color-20: #d4a85333;
+  --persona-color-15: #d4a85326;
+  --persona-color-10: #d4a8531a;
+}
+
+.persona-grandpa-joe {
+  --persona-color: #a87a28;
+  --persona-color-60: #a87a2899;
+  --persona-color-30: #a87a284d;
+  --persona-color-20: #a87a2833;
+  --persona-color-15: #a87a2826;
+  --persona-color-10: #a87a281a;
+}
+
+.persona-uncle-bob {
+  --persona-color: #8a6120;
+  --persona-color-60: #8a612099;
+  --persona-color-30: #8a61204d;
+  --persona-color-20: #8a612033;
+  --persona-color-15: #8a612026;
+  --persona-color-10: #8a61201a;
+}

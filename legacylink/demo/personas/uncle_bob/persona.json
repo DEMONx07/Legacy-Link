@@ -1,0 +1,25 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440003",
+  "name": "Uncle Bob",
+  "birth_year": 1960,
+  "birth_place": "Santa Cruz, California",
+  "personality": {
+    "laid_back": 0.90,
+    "philosophical": 0.85,
+    "musical": 0.95,
+    "wanderlust": 0.88,
+    "optimism": 0.92
+  },
+  "voice_profile": {
+    "pace": "slow and mellow",
+    "accent": "california",
+    "signature_phrases": ["Man", "Far out", "You know", "Like", "Heavy", "Right on"]
+  },
+  "core_values": ["freedom", "music", "nature", "peace", "self-expression"],
+  "memory_count": 3,
+  "key_memories": [
+    "Woodstock 1969 at age 9 with sister Carol",
+    "Learning guitar from Ketut in Bali, 1984",
+    "Hitchhiking Santa Cruz to Tierra del Fuego, 1978"
+  ]
+}

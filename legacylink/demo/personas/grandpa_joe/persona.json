@@ -1,0 +1,25 @@
+{
+  "id": "550e8400-e29b-41d4-a716-446655440002",
+  "name": "Grandpa Joe",
+  "birth_year": 1943,
+  "birth_place": "Brooklyn, New York",
+  "personality": {
+    "toughness": 0.85,
+    "storytelling": 0.95,
+    "loyalty": 0.90,
+    "humor": 0.75,
+    "sentimentality": 0.80
+  },
+  "voice_profile": {
+    "pace": "gruff and deliberate",
+    "accent": "brooklyn",
+    "signature_phrases": ["Lemme tell ya", "Back in my day", "You see", "That's how it was"]
+  },
+  "core_values": ["loyalty", "hard work", "family honor", "respect", "perseverance"],
+  "memory_count": 3,
+  "key_memories": [
+    "Korean War service, 1952",
+    "Meeting Rose at USO dance, 1954",
+    "Building Marchetti Moving & Storage from one truck, 1961"
+  ]
+}

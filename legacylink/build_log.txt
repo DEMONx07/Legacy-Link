@@ -1,0 +1,78 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2026-02-21T17:56:35+05:30" level=warning msg="D:\\legacylink-complete\\legacylink\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image legacylink-backend Building 
+ Image legacylink-frontend Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.08kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 484B done
+#2 DONE 0.0s
+
+#3 [auth] library/node:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/node:20-alpine
+#4 DONE 1.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [builder 1/6] FROM docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8
+#6 resolve docker.io/library/node:20-alpine@sha256:09e2b3d9726018aecf269bd35325f46bf75046a643a66d28360ec71132750ec8 0.0s done
+#6 DONE 0.0s
+
+#7 [builder 2/6] WORKDIR /app
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 2.32MB 0.8s done
+#8 DONE 0.8s
+
+#9 [builder 4/6] RUN npm ci
+#9 CACHED
+
+#10 [builder 5/6] COPY . .
+#10 CACHED
+
+#11 [builder 3/6] COPY package*.json ./
+#11 CACHED
+
+#12 [builder 6/6] RUN npm run build
+#12 CACHED
+
+#13 [runner 3/5] COPY --from=builder /app/.next/standalone ./
+#13 CACHED
+
+#14 [runner 4/5] COPY --from=builder /app/.next/static ./.next/static
+#14 CACHED
+
+#15 [runner 5/5] COPY --from=builder /app/public ./public
+#15 ERROR: failed to calculate checksum of ref si1aq7tmaet77kzllqksdknyn::li7ivexcwtk8q0eniwis3pmkt: "/app/public": not found
+------
+ > [runner 5/5] COPY --from=builder /app/public ./public:
+------
+Dockerfile:19
+
+--------------------
+
+  17 |     COPY --from=builder /app/.next/standalone ./
+
+  18 |     COPY --from=builder /app/.next/static ./.next/static
+
+  19 | >>> COPY --from=builder /app/public ./public
+
+  20 |     
+
+  21 |     EXPOSE 3000
+
+--------------------
+
+failed to solve: failed to compute cache key: failed to calculate checksum of ref si1aq7tmaet77kzllqksdknyn::li7ivexcwtk8q0eniwis3pmkt: "/app/public": not found
+
+
+
+View build details: docker-desktop://dashboard/build/default/default/rkqq8hog00bce29zyccn5tfr7
+
