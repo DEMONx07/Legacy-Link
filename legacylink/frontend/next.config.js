@@ -1,11 +1,11 @@
 const nextConfig = {
-  output: 'standalone',
-  experimental: {
-    serverComponentsExternalPackages: ['three'],
-  },
+  output: process.env.GITHUB_ACTIONS ? 'export' : 'standalone',
+  // When using static export, images cannot be optimized by Next.js server
   images: {
     unoptimized: true,
-    domains: ['localhost', 'api.dicebear.com', 'ui-avatars.com'],
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['three'],
   },
 };
 
