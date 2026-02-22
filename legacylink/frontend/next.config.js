@@ -1,10 +1,10 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',
   experimental: {
     serverComponentsExternalPackages: ['three'],
   },
   images: {
+    unoptimized: true,
     domains: ['localhost', 'api.dicebear.com', 'ui-avatars.com'],
   },
 };
