@@ -2,6 +2,8 @@
 ### *We can't stop death. But we can stop being forgotten.*
 
 > **Digital immortality platform** — Record a lifetime of stories. Create interactive AI avatars from a person's memories, personality, and voice. Future generations can have real conversations with the people they loved.
+>
+> 🌐 **Live Demo:** [https://DEMONx07.github.io/Legacy-Link/](https://DEMONx07.github.io/Legacy-Link/)
 
 ---
 
