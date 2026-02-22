@@ -20,6 +20,14 @@ const Avatar3D = dynamic(() => import('@/components/Avatar3D'), {
     ),
 });
 
+// Polyfill for randomUUID in non-secure contexts
+function generateId() {
+    if (typeof window !== 'undefined' && window.crypto?.randomUUID) {
+        return window.crypto.randomUUID();
+    }
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 interface Message {
     id: string;
     role: 'user' | 'avatar';
@@ -94,7 +102,7 @@ export default function AvatarClient({ params }: { params: { id: string } }) {
     const [expression, setExpression] = useState('neutral');
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [voiceEnabled, setVoiceEnabled] = useState(true);
-    const [sessionId] = useState(crypto.randomUUID());
+    const [sessionId] = useState(generateId());
     const [showInfo, setShowInfo] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -118,7 +126,7 @@ export default function AvatarClient({ params }: { params: { id: string } }) {
         if (!person) return;
         const timer = setTimeout(() => {
             const greetMsg: Message = {
-                id: crypto.randomUUID(),
+                id: generateId(),
                 role: 'avatar',
                 text: config.greeting,
                 emotion: 'warm',
@@ -144,7 +152,7 @@ export default function AvatarClient({ params }: { params: { id: string } }) {
         if (!text.trim() || isLoading) return;
 
         const userMsg: Message = {
-            id: crypto.randomUUID(),
+            id: generateId(),
             role: 'user',
             text: text.trim(),
             timestamp: new Date(),
@@ -158,7 +166,7 @@ export default function AvatarClient({ params }: { params: { id: string } }) {
             const response = await api.chat(personId, text.trim(), sessionId);
 
             const avatarMsg: Message = {
-                id: crypto.randomUUID(),
+                id: generateId(),
                 role: 'avatar',
                 text: response.response || '',
                 emotion: response.emotion,

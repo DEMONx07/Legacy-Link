@@ -1,6 +1,14 @@
 import { Person, ChatRequest, ChatResponse, TranscriptionResponse } from './types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const getApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return envUrl.replace(/localhost|127\.0\.0\.1/g, window.location.hostname);
+  }
+  return envUrl;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiClient {
   private async fetchJson<T>(endpoint: string, options?: RequestInit): Promise<T> {
@@ -21,7 +29,7 @@ class ApiClient {
   }
 
   async getGallery(): Promise<{ persons: Person[] }> {
-    return this.fetchJson('/gallery/');
+    return this.fetchJson('/gallery');
   }
 
   async getPerson(id: string): Promise<Person> {
@@ -29,7 +37,7 @@ class ApiClient {
   }
 
   async createPerson(data: any): Promise<Person> {
-    return this.fetchJson('/persons/', {
+    return this.fetchJson('/persons/create', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -45,7 +53,7 @@ class ApiClient {
   async chat(personId: string, text: string, sessionId: string): Promise<ChatResponse> {
     return this.fetchJson(`/chat/${personId}`, {
       method: 'POST',
-      body: JSON.stringify({ message: text, session_id: sessionId }),
+      body: JSON.stringify({ query: text, session_id: sessionId }),
     });
   }
 
@@ -53,7 +61,7 @@ class ApiClient {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`${API_BASE_URL}/chat/voice/transcribe`, {
+    const response = await fetch(`${API_BASE_URL}/voice/transcribe`, {
       method: 'POST',
       body: formData,
     });

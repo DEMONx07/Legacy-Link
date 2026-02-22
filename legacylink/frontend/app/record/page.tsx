@@ -7,6 +7,13 @@ import { ArrowLeft, Mic, Square, Send, CheckCircle, Plus, ChevronRight } from 'l
 import toast from 'react-hot-toast';
 import { api } from '@/lib/api';
 
+function generateId() {
+  if (typeof window !== 'undefined' && window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 const MEMORY_PROMPTS = [
   "Tell me about your childhood home...",
   "Describe your most treasured memory...",
@@ -48,7 +55,7 @@ export default function RecordPage() {
       toast.success(`${personName}'s legacy has been created!`);
     } catch {
       // Demo fallback
-      setPersonId('new-demo-' + Date.now());
+      setPersonId('new-demo-' + generateId());
       setStep('record');
       toast.success(`${personName}'s legacy has been created! (Demo mode)`);
     }
@@ -226,8 +233,8 @@ export default function RecordPage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className={`relative w-20 h-20 rounded-full flex items-center justify-center ${isRecording
-                      ? 'bg-gradient-to-br from-[#ef4444] to-[#dc2626] shadow-[0_0_30px_rgba(239,68,68,0.4)]'
-                      : 'bg-gradient-to-br from-[#e6c07a] to-[#d4a853] shadow-[0_0_30px_rgba(212,168,83,0.3)]'
+                    ? 'bg-gradient-to-br from-[#ef4444] to-[#dc2626] shadow-[0_0_30px_rgba(239,68,68,0.4)]'
+                    : 'bg-gradient-to-br from-[#e6c07a] to-[#d4a853] shadow-[0_0_30px_rgba(212,168,83,0.3)]'
                     }`}
                 >
                   {isRecording ? (

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, Square } from 'lucide-react';
+import { api } from '@/lib/api';
 
 interface VoiceRecorderProps {
   onTranscript: (text: string) => void;
@@ -77,13 +78,9 @@ export default function VoiceRecorder({ onTranscript, onError, disabled }: Voice
 
   const processAudio = async (blob: Blob) => {
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const form = new FormData();
-      form.append('file', blob, 'recording.webm');
-      const res = await fetch(`${API_BASE}/api/voice/transcribe`, { method: 'POST', body: form });
-      const data = await res.json();
-      if (data.text) {
-        onTranscript(data.text);
+      const res = await api.transcribeAudio(blob);
+      if (res.text) {
+        onTranscript(res.text);
       }
     } catch {
       onError?.('Voice processing unavailable. Please type your message.');
