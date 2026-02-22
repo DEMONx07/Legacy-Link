@@ -1,5 +1,7 @@
 const nextConfig = {
   output: 'export',
+  basePath: '/Legacy-Link',
+  assetPrefix: '/Legacy-Link',
   experimental: {
     serverComponentsExternalPackages: ['three'],
   },
